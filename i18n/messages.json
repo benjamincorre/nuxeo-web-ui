@@ -226,6 +226,7 @@
   "deleteTemplateButton.dialog.message": "Users will not be able to use this template anymore.",
   "deleteTemplateButton.tooltip": "Delete Template",
   "displayModeButton.display.grid": "Switch to grid view",
+  "displayModeButton.display.list": "Switch to list view",
   "displayModeButton.display.table": "Switch to table view",
   "documentAttachments.heading": "Attachments",
   "documentAttachments.upload.uploaded": "Attachment(s) uploaded",
