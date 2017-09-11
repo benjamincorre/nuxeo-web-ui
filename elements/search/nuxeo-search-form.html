@@ -220,7 +220,7 @@ limitations under the License.
       }
     </style>
 
-    <nuxeo-page-provider id="provider" auto$="[[_isAuto(auto, visible)]]"
+    <nuxeo-page-provider id="provider"
        provider="[[provider]]"
        page-size="[[pageSize]]"
        aggregations="{{aggregations}}"
@@ -504,7 +504,12 @@ limitations under the License.
         displayAutoControl: {
           type: Boolean,
           value: false
-        }
+        },
+
+        /**
+         * Currently selected view in search results
+         */
+        view: Object
       },
 
       observers: [
@@ -518,6 +523,10 @@ limitations under the License.
         body.appendChild(this.$.renameDialog);
         body.appendChild(this.$.shareDialog);
         body.appendChild(this.$.deleteDialog);
+
+        document.addEventListener('search-results-view', function(e) {
+          this.view = e.detail.view;
+        }.bind(this));
       },
 
       get nxProvider() {
@@ -545,19 +554,7 @@ limitations under the License.
             this.$.list.$.list.scrollToItem(doc);
           }
         }.bind(this);
-        if (!this.auto) {
-          this.$.provider.fetch().then(doDisplay);
-        } else {
-          doDisplay();
-        }
-      },
-
-      _isAuto: function() {
-        var result = this.visible && this.auto;
-        if (result) {
-          this._resetResults();
-        }
-        return result;
+        this.$.list.fetch().then(doDisplay);
       },
 
       _resetResults: function() {
@@ -595,6 +592,9 @@ limitations under the License.
       _paramsChanged: function() {
         this.$.provider.page = 1;
         this.dirty = true;
+        if (this.view) {
+          this.view.fetch();
+        }
       },
 
       _selectedSearchIdxChanged: function() {
